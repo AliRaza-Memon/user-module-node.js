@@ -1,16 +1,18 @@
 const User = require ('../model/user');
 
-//Creating a new user
-
-exports.createUser = async =(req,res)=>{
-
-
-    try{
+exports.createUser = async (req, res) => {
+    try {
+        // Create a new user instance from the request body
         const user = new User(req.body);
-        await.user.save();
+
+        // Save the user to the database using await
+        await user.save();
+
+        // Respond with the created user and a status code of 201 (Created)
         res.status(201).json(user);
-    }catch(error){
-        res.status(400).json({error: error.message});
+    } catch (error) {
+        // Handle any errors that occur during user creation
+        res.status(400).json({ error: error.message });
     }
 };
 
