@@ -1,14 +1,21 @@
 const User = require ('../model/user');
+const Joi = require('joi');
+const express = require('express');
+const app = express();
+const _ = require('lodash');
+
 
 exports.createUser = async (req, res) => {
     try {
+        const {error} = User.validate(req.body);
+        if(error)
+            return res.status(400).send(error.details[0].message);
         // Create a new user instance from the request body
         const user = new User(req.body);
-
         // Save the user to the database using await
         await user.save();
-
         // Respond with the created user and a status code of 201 (Created)
+        _.pick
         res.status(201).json(user);
     } catch (error) {
         // Handle any errors that occur during user creation
