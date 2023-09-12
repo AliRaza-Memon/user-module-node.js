@@ -1,8 +1,10 @@
+const bcrypt = require('bcrypt')
 const User = require ('../model/user');
 const Joi = require('joi');
 const express = require('express');
 const app = express();
 const _ = require('lodash');
+
 
 exports.createUser = async (req, res) => {
     try {
@@ -13,6 +15,9 @@ exports.createUser = async (req, res) => {
 
         // Create a new user instance from the request body
         const user = new User(_.pick(req.body, ['email', 'password', 'fullName', 'username']));
+
+        const salt = await bcrypt.genSalt(10);
+        user.password = await bcrypt.hash(user.password,salt);
 
         // Save the user to the database using await
         await user.save();
