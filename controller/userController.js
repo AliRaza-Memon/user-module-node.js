@@ -1,3 +1,5 @@
+const jwt = require('jsonwebtoken');
+const config = require('config');
 const bcrypt = require('bcrypt')
 const User = require ('../model/user');
 const Joi = require('joi');
@@ -22,8 +24,9 @@ exports.createUser = async (req, res) => {
         // Save the user to the database using await
         await user.save();
 
+        const token = jwt.sign({ _id: user.id }, config.get('jwtPrivateKey'));
         // Respond with the created user and a status code of 201 (Created)
-        res.status(201).json(_.pick(user, ['_id', 'fullName', 'email', 'username']));
+        res.header('x-auth-token',token).status(201).json(_.pick(user, ['_id', 'fullName', 'email', 'username']));
     } catch (error) {
         // Handle any errors that occur during user creation
         res.status(400).json({ error: error.message });
