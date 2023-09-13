@@ -1,3 +1,4 @@
+const config = require('config')
 const express = require("express");
 const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
@@ -12,6 +13,12 @@ const app = express();
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(bodyParser.json());
+  
+
+if (!config.get('jwtPrivateKey')){
+    console.error('FATAL ERROR: jwtPrivateKey is not defined. ');
+    process.exit(1);
+}
 
 // Connect to MongoDB
 mongoose.connect('mongodb://127.0.0.1:27017/userModule', {
