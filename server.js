@@ -4,6 +4,7 @@ const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
 const userRoutes = require("./routes/userRoutes");
 const authRoutes = require("./routes/authRoutes")
+const productRoutes = require("./routes/productRoutes")
 
 const PORT = 3000;
 const app = express();
@@ -35,7 +36,7 @@ mongoose.connect('mongodb://127.0.0.1:27017/userModule', {
 //Routes
 app.use("/api/user", userRoutes);
 app.use("/api/auth", authRoutes);
-
+app.use("/api/product",productRoutes);
 
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);

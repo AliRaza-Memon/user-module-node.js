@@ -1,11 +1,8 @@
-const config = require('config');
-const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt'); 
-const User = require ('../model/user');
+const User = require ('../model/User');
 const Joi = require('joi');
 const express = require('express');
 const app = express();
-
 
 
 exports.authUser = async (req, res) => {
@@ -22,8 +19,7 @@ exports.authUser = async (req, res) => {
         const validPassword = await bcrypt.compare(req.body.password, user.password )
         if(!validPassword)
             return res.status(400).send('Invalid email or password');
-        
-        const token = jwt.sign({ _id: user.id }, config.get('jwtPrivateKey'));
+        const token = user.generateAuthToken();
         res.send(token);
 
 };
@@ -36,5 +32,5 @@ exports.authUser = async (req, res) => {
 //         password: Joi.string().min(2).max(255).required()
 //     };
     
-//     return Joi.validateAsync(req, schema);
+//     return Joi.validate(req, schema);
 // }
